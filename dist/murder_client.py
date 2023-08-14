@@ -20,14 +20,14 @@
 import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
-from BitTornado import PSYCO
-if PSYCO.psyco:
-    try:
-        import psyco
-        assert psyco.__version__ >= 0x010100f0
-        psyco.full()
-    except:
-        pass
+# from BitTornado import PSYCO
+# if PSYCO.psyco:
+#     try:
+#         import psyco
+#         assert psyco.__version__ >= 0x010100f0
+#         psyco.full()
+#     except:
+#         pass
 
 from BitTornado.download_bt1 import BT1Download, defaults, parse_params, get_usage, get_response
 from BitTornado.RawServer import RawServer, UPnP_ERROR
