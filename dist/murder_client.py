@@ -47,12 +47,8 @@ from BitTornado.clock import clock
 from BitTornado import createPeerID, version
 from BitTornado.ConfigDir import ConfigDir
 
-assert sys.version >= '2', "Install Python 2.0 or greater"
-try:
-    True
-except:
-    True = 1
-    False = 0
+if sys.version_info < (3, 0):
+    raise ImportError("Install Python 3.0 or greater")
 
 doneFlag = None
 isPeer = False
