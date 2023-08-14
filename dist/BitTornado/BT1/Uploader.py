@@ -142,4 +142,3 @@ class Upload:
 
     def get_rate(self):
         return self.measure.get_rate()
-    

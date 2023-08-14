@@ -101,7 +101,7 @@ class HeadlessDisplayer:
 
         global isPeer
 
-        print "done and done"
+        print("done and done")
 
         if isPeer:
           if os.fork():
@@ -133,7 +133,7 @@ class HeadlessDisplayer:
         #self.errors.append(errormsg)
         self.display()
         global doneFlag
-        print errormsg
+        print(errormsg)
         doneFlag.set()
 
     def display(self, dpflag = Event(), fractionDone = None, timeEst = None,
@@ -164,7 +164,7 @@ class HeadlessDisplayer:
            self.peerStatus = '%d seen now, %.1f%% done at %.1f kB/s' % (statistics.numPeers,statistics.percentDone,float(statistics.torrentRate) / (1 << 10))
         #print '\n\n\n\n'
         for err in self.errors:
-            print 'ERROR:\n' + err + '\n'
+            print('ERROR:\n' + err + '\n')
         #print 'saving:        ', self.file
         #print 'percent done:  ', self.percentDone
         #print 'time left:     ', self.timeEst
@@ -201,11 +201,11 @@ def run(params):
          "(only for btdownloadheadless.py)"))
         try:
             config = parse_params(params, configdefaults)
-        except ValueError, e:
-            print 'error: ' + str(e) + '\nrun with no args for parameter explanations'
+        except ValueError as e:
+            print('error: ' + str(e) + '\nrun with no args for parameter explanations')
             break
         if not config:
-            print get_usage(defaults, 80, configdefaults)
+            print(get_usage(defaults, 80, configdefaults))
             break
         if config['save_options']:
             configdir.saveConfig(config)
@@ -217,7 +217,7 @@ def run(params):
         global doneFlag
         doneFlag = Event()
         def disp_exception(text):
-          print text
+          print(text)
         rawserver = RawServer(doneFlag, config['timeout_check_interval'],
                               config['timeout'], ipv6_enable = config['ipv6_enabled'],
                               failfunc = h.failed, errorfunc = disp_exception)
@@ -228,12 +228,12 @@ def run(params):
                                 config['bind'], ipv6_socket_style = config['ipv6_binds_v4'],
                                 upnp = upnp_type, randomizer = config['random_port'])
                 break
-            except socketerror, e:
+            except socketerror as e:
                 if upnp_type and e == UPnP_ERROR:
-                    print 'WARNING: COULD NOT FORWARD VIA UPnP'
+                    print('WARNING: COULD NOT FORWARD VIA UPnP')
                     upnp_type = 0
                     continue
-                print "error: Couldn't listen - " + str(e)
+                print("error: Couldn't listen - " + str(e))
                 h.failed()
                 return
 
@@ -274,13 +274,13 @@ def run(params):
 if __name__ == '__main__':
 
   if len(argv) != 5:
-    print "Incorrect number of arguments"
-    print
-    print """Usage:
+    print("Incorrect number of arguments")
+    print()
+    print("""Usage:
     python murder_client.py peer/seed out.torrent OUT.OUT 127.0.0.1
 
     The last parameter is the local ip address, normally 10.x.x.x
-    """
+    """)
     sys.exit(1)
 
   argv = ["--responsefile", sys.argv[2],

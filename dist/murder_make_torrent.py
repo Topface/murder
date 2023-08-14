@@ -28,20 +28,21 @@ from BitTornado.BT1.makemetafile import make_meta_file
 if __name__ == '__main__':
 
   if len(argv) != 4:
-    print "Incorrect number of arguments"
-    print
-    print """Usage:
+    print("Incorrect number of arguments")
+    print()
+    print("""Usage:
     python murder_make_torrent.py <file> <trackerhost:port> <target>
 
     For example:
     python murder_make_torrent.py deploy.tar.gz tracker.twitter.com:8998 deploy.torrent
-    """
+    """)
     exit(1)
 
   try:
     params = {}
     params["target"] = argv[3]
     make_meta_file(argv[1], "http://" + argv[2] + "/announce", params)
-  except ValueError, e:
-    print str(e)
+  except ValueError as e:
+    print(str(e))
     exit(1)
+
