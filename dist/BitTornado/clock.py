@@ -1,41 +1,27 @@
-"""Provide a non-decreasing clock() function.
+# Written by John Hoffman
+# see LICENSE.txt for license information
 
-In Windows, time.clock() provides number of seconds from first call, so use
-that.
-
-In Unix, time.clock() is CPU time, and time.time() reports system time, which
-may not be non-decreasing."""
-
-import time
+from time import *
 import sys
 
 _MAXFORWARD = 100
 _FUDGE = 1
 
-
-class RelativeTime(object):     # pylint: disable=R0903
-    """Non-decreasing time implementation for Unix"""
+class RelativeTime:
     def __init__(self):
-        self.time = time.time()
+        self.time = time()
         self.offset = 0
 
-    def get_time(self):
-        """Calculate a non-decreasing time representation"""
-        systemtime = time.time()
-
-        now = systemtime + self.offset
-
-        if self.time < now < self.time + _MAXFORWARD:
-            self.time = now
-        else:
-            # If time jump is outside acceptable bounds, move ahead one second
-            # and note the offset
+    def get_time(self):        
+        t = time() + self.offset
+        if t < self.time or t > self.time + _MAXFORWARD:
             self.time += _FUDGE
-            self.offset = self.time - systemtime
-
-        return self.time
+            self.offset += self.time - t
+            return self.time
+        self.time = t
+        return t
 
 if sys.platform != 'win32':
-    clock = RelativeTime().get_time     # pylint: disable=C0103
-else:
-    from time import clock
+    _RTIME = RelativeTime()
+    def clock():
+        return _RTIME.get_time()
