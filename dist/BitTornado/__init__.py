@@ -4,8 +4,10 @@ version_short = 'T-0.3.17'
 version = version_short+' ('+product_name+')'
 report_email = version_short+'@degreez.net'
 
-from types import StringType
-from sha import sha
+#from types import StringType
+from types import *
+#from sha import sha
+import hashlib
 from time import time, clock
 try:
     from os import getpid
@@ -51,13 +53,14 @@ def resetPeerIDs():
            + str(getpid()) )
 
     s = ''
-    for i in sha(x).digest()[-11:]:
+    for i in hashlib(x).digest()[-11:]:
         s += mapbase64[ord(i) & 0x3F]
     _idrandom[0] = s
         
 resetPeerIDs()
 
 def createPeerID(ins = '---'):
-    assert type(ins) is StringType
+    #assert type(ins) is StringType
+    assert type(ins) is str
     assert len(ins) == 3
     return _idprefix + ins + _idrandom[0]
