@@ -41,19 +41,18 @@ from sys import argv, stdout
 import sys
 import os
 import threading
-#from sha import sha
-import hashlib
+from sha import sha
 from time import strftime
 from BitTornado.clock import clock
 from BitTornado import createPeerID, version
 from BitTornado.ConfigDir import ConfigDir
 
 assert sys.version >= '2', "Install Python 2.0 or greater"
-# try:
-#     True
-# except:
-#     True = 1
-#     False = 0
+try:
+    True
+except:
+    True = 1
+    False = 0
 
 doneFlag = None
 isPeer = False
@@ -242,8 +241,7 @@ def run(params):
         if not response:
             break
 
-        #infohash = sha(bencode(response['info'])).digest()
-        infohash = hashlib.sha1(bencode(response['info'])).hexdigest()
+        infohash = sha(bencode(response['info'])).digest()
 
         dow = BT1Download(h.display, h.finished, h.error, disp_exception, doneFlag,
                         config, response, infohash, myid, rawserver, listen_port,
