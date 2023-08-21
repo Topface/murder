@@ -2,13 +2,12 @@
 # see LICENSE.txt for license information
 
 from http.client import HTTPConnection, HTTPSConnection, HTTPException
-from urllib.parse import urlparse
 from bencode import bdecode
 import socket
 from gzip import GzipFile
 from io import StringIO
-from urllib.parse import quote, unquote
-from __init__ import product_name, version_short
+from urllib.parse import quote, unquote, urlparse
+from BitTornado.__init__ import product_name, version_short
 
 VERSION = product_name+'/'+version_short
 MAX_REDIRECTS = 10

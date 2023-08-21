@@ -41,18 +41,14 @@ from sys import argv, stdout
 import sys
 import os
 import threading
-from sha import sha
-from time import strftime
+import hashlib
+import time
 from BitTornado.clock import clock
 from BitTornado import createPeerID, version
 from BitTornado.ConfigDir import ConfigDir
+from types import *
 
-assert sys.version >= '2', "Install Python 2.0 or greater"
-try:
-    True
-except:
-    True = 1
-    False = 0
+assert sys.version >= '3', "Install Python 3.0 or greater"
 
 doneFlag = None
 isPeer = False
@@ -277,7 +273,7 @@ if __name__ == '__main__':
     print("Incorrect number of arguments")
     print()
     print("""Usage:
-    python murder_client.py peer/seed out.torrent OUT.OUT 127.0.0.1
+    python3 murder_client.py peer/seed out.torrent OUT.OUT 127.0.0.1
 
     The last parameter is the local ip address, normally 10.x.x.x
     """)

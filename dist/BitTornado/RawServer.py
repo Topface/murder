@@ -2,20 +2,15 @@
 # see LICENSE.txt for license information
 
 from bisect import insort
-from SocketHandler import SocketHandler, UPnP_ERROR
+from BitTornado.SocketHandler import SocketHandler, UPnP_ERROR
 import socket
 from io import StringIO
 from traceback import print_exc
 from select import error
 from threading import Thread, Event
-from time import sleep
-from clock import clock
+import time
+from BitTornado.clock import clock
 import sys
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 
 def autodetect_ipv6():

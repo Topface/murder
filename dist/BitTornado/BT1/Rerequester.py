@@ -5,30 +5,25 @@
 from BitTornado.zurllib import urlopen, quote
 from urllib.parse import urlparse, urlunparse
 from socket import gethostbyname
-from btformats import check_peers
+from BitTornado.BT1.btformats import check_peers
 from BitTornado.bencode import bdecode
 from threading import Thread, Lock
 from io import StringIO
 from traceback import print_exc
 from socket import error, gethostbyname
 from random import shuffle
-from sha import sha
-from time import time
+import hashlib
+import time
 try:
     from os import getpid
 except ImportError:
     def getpid():
         return 1
     
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 mapbase64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-'
 keys = {}
-basekeydata = str(getpid()) + repr(time()) + 'tracker'
+basekeydata = str(getpid()) + repr(time.time()) + 'tracker'
 
 def add_key(tracker):
     key = ''

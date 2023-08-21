@@ -6,11 +6,6 @@ from binascii import b2a_hex
 from socket import error as socketerror
 from urllib.parse import quote
 from traceback import print_exc
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 MAX_INCOMPLETE = 8
 
@@ -27,7 +22,7 @@ def tobinary(i):
 hexchars = '0123456789ABCDEF'
 hexmap = []
 for i in range(256):
-    hexmap.append(hexchars[(i&0xF0)/16]+hexchars[i&0x0F])
+    hexmap.append(hexchars[int((i&0xF0)/16)]+hexchars[i&0x0F])
 
 def tohex(s):
     r = []

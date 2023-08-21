@@ -3,17 +3,12 @@
 
 from traceback import print_exc
 from binascii import b2a_hex
-from clock import clock
-from CurrentRateMeasure import Measure
+from BitTornado.clock import clock
+from BitTornado.CurrentRateMeasure import Measure
 from io import StringIO
 from math import sqrt
 from functools import reduce
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 try:
     sum([1])
 except:

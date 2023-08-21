@@ -14,25 +14,20 @@ if PSYCO.psyco:
 
 from download_bt1 import BT1Download
 from RawServer import RawServer, UPnP_ERROR
-from RateLimiter import RateLimiter
+from BitTornado.RateLimiter import RateLimiter
 from ServerPortHandler import MultiHandler
 from parsedir import parsedir
-from natpunch import UPnP_test
+from BitTornado.natpunch import UPnP_test
 from random import seed
 from socket import error as socketerror
 from threading import Event
 from sys import argv, exit
 import sys, os
-from clock import clock
+from BitTornado.clock import clock
 from __init__ import createPeerID, mapbase64, version
 from io import StringIO
 from traceback import print_exc
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 
 def fmttime(n):

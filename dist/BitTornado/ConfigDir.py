@@ -1,19 +1,14 @@
 #written by John Hoffman
 
-from inifile import ini_write, ini_read
-from bencode import bencode, bdecode
-from types import IntType, LongType, StringType, FloatType
-from CreateIcons import GetIcons, CreateIcon
-from parseargs import defaultargs
-from __init__ import product_name, version_short
+from BitTornado.inifile import ini_write, ini_read
+from BitTornado.bencode import bencode, bdecode
+from types import *
+from BitTornado.CreateIcons import GetIcons, CreateIcon
+from BitTornado.parseargs import defaultargs
+from BitTornado.__init__ import product_name, version_short
 import sys,os
-from time import time, strftime
+import time
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 try:
     realpath = os.path.realpath
@@ -27,7 +22,7 @@ hexchars = '0123456789abcdef'
 hexmap = []
 revmap = {}
 for i in range(256):
-    x = hexchars[(i&0xF0)/16]+hexchars[i&0x0F]
+    x = hexchars[int((i&0xF0)/16)]+hexchars[i&0x0F]
     hexmap.append(x)
     revmap[x] = chr(i)
 
@@ -146,7 +141,7 @@ class ConfigDir:
             if k in self.config:
                 t = type(self.config[k])
                 try:
-                    if t == StringType:
+                    if t == str:
                         self.config[k] = v
                     elif t == IntType or t == LongType:
                         self.config[k] = int(v)
@@ -324,7 +319,7 @@ class ConfigDir:
     def deleteOldCacheData(self, days, still_active = [], delete_torrents = False):
         if not days:
             return
-        exptime = time() - (days*24*3600)
+        exptime = time.time() - (days*24*3600)
         names = {}
         times = {}
 
@@ -345,7 +340,7 @@ class ConfigDir:
             try:
                 t = os.path.getmtime(p)
             except:
-                t = time()
+                t = time.time()
             times.setdefault(f,[]).append(t)
         
         for f in os.listdir(self.dir_datacache):
@@ -359,7 +354,7 @@ class ConfigDir:
             try:
                 t = os.path.getmtime(p)
             except:
-                t = time()
+                t = time.time()
             times.setdefault(f,[]).append(t)
 
         for f in os.listdir(self.dir_piececache):
@@ -375,7 +370,7 @@ class ConfigDir:
                 try:
                     t = os.path.getmtime(p2)
                 except:
-                    t = time()
+                    t = time.time()
                 times.setdefault(f,[]).append(t)
             names.setdefault(f,[]).append(p)
 

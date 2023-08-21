@@ -2,11 +2,6 @@
 # see LICENSE.txt for license information
 
 from threading import Event
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 class Statistics_Response:
     pass    # empty class

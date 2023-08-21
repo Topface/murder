@@ -3,7 +3,7 @@
 
 from BitTornado.piecebuffer import BufferPool
 from threading import Lock
-from time import time, strftime, localtime
+import time
 import os
 from os.path import exists, getsize, getmtime, basename
 from traceback import print_exc
@@ -13,11 +13,6 @@ except ImportError:
     fsync = lambda x: None
 from bisect import bisect
     
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 DEBUG = False
 

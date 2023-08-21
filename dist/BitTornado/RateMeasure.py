@@ -1,12 +1,7 @@
 # Written by Bram Cohen
 # see LICENSE.txt for license information
 
-from clock import clock
-try:
-    True
-except:
-    True = 1
-    False = 0
+from BitTornado.clock import clock
 
 FACTOR = 0.999
 

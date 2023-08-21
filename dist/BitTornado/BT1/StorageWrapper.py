@@ -2,15 +2,10 @@
 # see LICENSE.txt for license information
 
 from BitTornado.bitfield import Bitfield
-from sha import sha
+import hashlib
 from BitTornado.clock import clock
 from traceback import print_exc
 from random import randrange
-try:
-    True
-except:
-    True = 1
-    False = 0
 try:
     from bisect import insort
 except:

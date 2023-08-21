@@ -31,7 +31,7 @@ def formatDefinitions(options, COLS, presets = {}):
     for (longname, default, doc) in options:
         s.write('--' + longname + ' <arg>\n')
         default = presets.get(longname, default)
-        if type(default) in (IntType, LongType):
+        if type(default) is int:
             try:
                 default = int(default)
             except:
@@ -81,11 +81,11 @@ def parseargs(argv, options, minargs = None, maxargs = None, presets = {}):
             longname, default, doc = longkeyed[key]
             try:
                 t = type(config[longname])
-                if t is NoneType or t is StringType:
+                if t is type(None) or t is str or t is bytes:
                     config[longname] = value
-                elif t in (IntType, LongType):
+                elif t is int:
                     config[longname] = int(value)
-                elif t is FloatType:
+                elif t is float:
                     config[longname] = float(value)
                 else:
                     assert 0

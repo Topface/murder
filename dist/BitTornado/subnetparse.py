@@ -3,12 +3,7 @@
 
 from bisect import bisect, insort
 
-try:
-    True
-except:
-    True = 1
-    False = 0
-    bool = lambda x: not not x
+bool = lambda x: not not x
 
 hexbinmap = {
     '0': '0000',

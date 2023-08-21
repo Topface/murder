@@ -1,7 +1,11 @@
 # Written by Petru Paler, Uoti Urpala, Ross Cohen and John Hoffman
 # see LICENSE.txt for license information
 
-from types import IntType, LongType, StringType, ListType, TupleType, DictType
+from types import *
+from typing import List
+from typing import Tuple
+from typing import Dict
+
 try:
     from types import BooleanType
 except ImportError:
@@ -13,29 +17,55 @@ except ImportError:
 from io import StringIO
 
 def decode_int(x, f):
+#     f += 1
+#     newf = x.index(b'e', f)
+#     try:
+#         n = int(x[f:newf])
+#     except:
+#         n = int(x[f:newf])
+#     if x[f] == '-':
+#         if x[f + 1] == ord('0'):
+#             raise ValueError
+#     elif x[f] == ord('0') and newf != f+1:
+#         raise ValueError
+#     return (n, newf+1)
     f += 1
-    newf = x.index('e', f)
-    try:
-        n = int(x[f:newf])
-    except:
-        n = int(x[f:newf])
-    if x[f] == '-':
-        if x[f + 1] == '0':
-            raise ValueError
-    elif x[f] == '0' and newf != f+1:
+    newpos = x.find(b'e', f)
+
+    # '-0' is invalid and strings beginning with '0' must be == '0'
+    if any((newpos < 0, x[f:f + 2] == b'-0',
+            x[f] == ord('0') and newpos != f + 1)):
         raise ValueError
-    return (n, newf+1)
+
+    return (int(x[f:newpos]), newpos + 1)
   
 def decode_string(x, f):
-    colon = x.index(':', f)
-    try:
-        n = int(x[f:colon])
-    except (OverflowError, ValueError):
-        n = int(x[f:colon])
-    if x[f] == '0' and colon != f+1:
+#     colon = x.index(b':', f)
+#     try:
+#         n = int(x[f:colon])
+#     except (OverflowError, ValueError):
+#         n = int(x[f:colon])
+#     if x[f] == '0' and colon != f+1:
+#         raise ValueError
+#     colon += 1
+#     try:
+#         return (x[colon:colon+n].decode('utf-8'), colon+n)
+#     except UnicodeDecodeError:
+#         return (x[colon:colon+n], colon+n)
+    colon = x.find(b':', f)
+    length = int(x[f:colon])
+
+    # '0:' is the only valid string beginning with '0'
+    if any((colon == -1, x[f] == ord('0') and colon != f + 1,
+            len(x) <= colon + length)):
         raise ValueError
+
     colon += 1
-    return (x[colon:colon+n], colon+n)
+    data, f = (x[colon:colon + length], colon + length)
+    try:
+        return (data.decode('utf-8'), f)
+    except UnicodeDecodeError:
+        return (data, f)
 
 def decode_unicode(x, f):
     s, f = decode_string(x, f+1)
@@ -43,21 +73,31 @@ def decode_unicode(x, f):
 
 def decode_list(x, f):
     r, f = [], f+1
-    while x[f] != 'e':
+    while x[f] != ord('e'):
         v, f = decode_func[x[f]](x, f)
         r.append(v)
     return (r, f + 1)
 
 def decode_dict(x, f):
-    r, f = {}, f+1
-    lastkey = None
-    while x[f] != 'e':
-        k, f = decode_string(x, f)
-        if lastkey >= k:
+#     r, f = {}, f+1
+#     lastkey = b''
+#     while x[f] != ord('e'):
+#         k, f = decode_string(x, f)
+#         if lastkey >= k:
+#             raise ValueError
+#         lastkey = k
+#         r[k], f = decode_func[x[f]](x, f)
+#     return (r, f + 1)
+    data, f = {}, f + 1
+    lastkey = b''
+    while x[f] != ord('e'):
+        key, f = decode_string(x, f)
+        rawkey = key if isinstance(key, bytes) else key.encode()
+        if lastkey >= rawkey:
             raise ValueError
-        lastkey = k
-        r[k], f = decode_func[x[f]](x, f)
-    return (r, f + 1)
+        lastkey = rawkey
+        data[key], f = decode_func[x[f]](x, f)
+    return (data, f + 1)
 
 decode_func = {}
 decode_func['l'] = decode_list
@@ -241,41 +281,47 @@ def encode_bencached(x,r):
     r.append(x.bencoded)
 
 def encode_int(x,r):
-    r.extend(('i',str(x),'e'))
+#     r.extend(('i',str(x),'e'))
+    r.append('i{:d}e'.format(x).encode('utf-8'))
 
 def encode_bool(x,r):
     encode_int(int(x),r)
 
-def encode_string(x,r):    
-    r.extend((str(len(x)),':',x))
+def encode_string(x,r):
+    if type(x) == str:
+        x = x.encode('utf-8')
+    r.extend((str(len(x)).encode('utf-8'), b':', x))
 
 def encode_unicode(x,r):
     #r.append('u')
     encode_string(x.encode('UTF-8'),r)
 
 def encode_list(x,r):
-        r.append('l')
+        r.append(b'l')
         for e in x:
             encode_func[type(e)](e, r)
-        r.append('e')
+        r.append(b'e')
 
 def encode_dict(x,r):
-    r.append('d')
+    r.append(b'd')
     ilist = list(x.items())
     ilist.sort()
     for k,v in ilist:
-        r.extend((str(len(k)),':',k))
+#         r.extend((str(len(k)),b':',k))
+#         encode_func[type(v)](v, r)
+        encode_func[type(k)](k, r)
         encode_func[type(v)](v, r)
-    r.append('e')
+    r.append(b'e')
 
 encode_func = {}
 encode_func[BencachedType] = encode_bencached
-encode_func[IntType] = encode_int
-encode_func[LongType] = encode_int
-encode_func[StringType] = encode_string
-encode_func[ListType] = encode_list
-encode_func[TupleType] = encode_list
-encode_func[DictType] = encode_dict
+encode_func[int] = encode_int
+# encode_func[long] = encode_int
+encode_func[str] = encode_string
+encode_func[bytes] = encode_string
+encode_func[list] = encode_list
+encode_func[tuple] = encode_list
+encode_func[dict] = encode_dict
 if BooleanType:
     encode_func[BooleanType] = encode_bool
 if UnicodeType:
@@ -288,7 +334,7 @@ def bencode(x):
     except:
         print("*** error *** could not encode type %s (value: %s)" % (type(x), x))
         assert 0
-    return ''.join(r)
+    return b''.join(r)
 
 def test_bencode():
     assert bencode(4) == 'i4e'

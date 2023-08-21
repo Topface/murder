@@ -1,16 +1,11 @@
 # Written by John Hoffman and Uoti Urpala
 # see LICENSE.txt for license information
 from bencode import bencode, bdecode
-from BT1.btformats import check_info
+from BitTornado.BT1.btformats import check_info
 from os.path import exists, isfile
-from sha import sha
+import hashlib
 import sys, os
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 NOISY = False
 

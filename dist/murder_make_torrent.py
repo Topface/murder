@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 from sys import argv, version, exit
 from os.path import split
-assert version >= '2', "Install Python 2.0 or greater"
+assert version >= '3', "Install Python 3.0 or greater"
 from BitTornado.BT1.makemetafile import make_meta_file
 
 if __name__ == '__main__':

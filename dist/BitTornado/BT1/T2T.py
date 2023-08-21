@@ -1,18 +1,12 @@
 # Written by John Hoffman
 # see LICENSE.txt for license information
 
-from Rerequester import Rerequester
+from BitTornado.BT1.Rerequester import Rerequester
 from urllib.parse import quote
 from threading import Event
 from random import randrange
-from string import lower
 import sys
-import __init__
-try:
-    True
-except:
-    True = 1
-    False = 0
+import BitTornado.BT1.__init__
 
 DEBUG = True
 
@@ -96,7 +90,7 @@ class T2TConnection:
             self.deactivate()
             self.disallow(self.tracker)   # signal other torrents on this tracker
             return
-        if lower(r[:8]) == 'rejected': # tracker rejected this particular torrent
+        if r[:8].apply(str.lower) == 'rejected': # tracker rejected this particular torrent
             self.rejected += 1
             if self.rejected == 3:     # rejected 3 times
                 if DEBUG:

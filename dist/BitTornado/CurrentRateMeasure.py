@@ -1,7 +1,7 @@
 # Written by Bram Cohen
 # see LICENSE.txt for license information
 
-from clock import clock
+from BitTornado.clock import clock
 
 class Measure:
     def __init__(self, max_rate_period, fudge = 1):

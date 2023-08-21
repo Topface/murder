@@ -1,43 +1,37 @@
 # Written by Bram Cohen
 # see LICENSE.txt for license information
 
-from zurllib import urlopen
+from urllib.request import urlopen
 from urllib.parse import urlparse
-from BT1.btformats import check_message
-from BT1.Choker import Choker
-from BT1.Storage import Storage
-from BT1.StorageWrapper import StorageWrapper
-from BT1.FileSelector import FileSelector
-from BT1.Uploader import Upload
-from BT1.Downloader import Downloader
-from BT1.HTTPDownloader import HTTPDownloader
-from BT1.Connecter import Connecter
-from RateLimiter import RateLimiter
-from BT1.Encrypter import Encoder
-from RawServer import RawServer, autodetect_ipv6, autodetect_socket_style
-from BT1.Rerequester import Rerequester
-from BT1.DownloaderFeedback import DownloaderFeedback
-from RateMeasure import RateMeasure
-from CurrentRateMeasure import Measure
-from BT1.PiecePicker import PiecePicker
-from BT1.Statistics import Statistics
-from ConfigDir import ConfigDir
-from bencode import bencode, bdecode
-from natpunch import UPnP_test
-from sha import sha
+from BitTornado.BT1.btformats import check_message
+from BitTornado.BT1.Choker import Choker
+from BitTornado.BT1.Storage import Storage
+from BitTornado.BT1.StorageWrapper import StorageWrapper
+from BitTornado.BT1.FileSelector import FileSelector
+from BitTornado.BT1.Uploader import Upload
+from BitTornado.BT1.Downloader import Downloader
+from BitTornado.BT1.HTTPDownloader import HTTPDownloader
+from BitTornado.BT1.Connecter import Connecter
+from BitTornado.RateLimiter import RateLimiter
+from BitTornado.BT1.Encrypter import Encoder
+from BitTornado.RawServer import RawServer, autodetect_ipv6, autodetect_socket_style
+from BitTornado.BT1.Rerequester import Rerequester
+from BitTornado.BT1.DownloaderFeedback import DownloaderFeedback
+from BitTornado.RateMeasure import RateMeasure
+from BitTornado.CurrentRateMeasure import Measure
+from BitTornado.BT1.PiecePicker import PiecePicker
+from BitTornado.BT1.Statistics import Statistics
+from BitTornado.ConfigDir import ConfigDir
+from BitTornado.bencode import bencode, bdecode
+from BitTornado.natpunch import UPnP_test
+import hashlib
 from os import path, makedirs, listdir
-from parseargs import parseargs, formatDefinitions, defaultargs
+from BitTornado.parseargs import parseargs, formatDefinitions, defaultargs
 from socket import error as socketerror
 from random import seed
 from threading import Thread, Event
-from clock import clock
-from __init__ import createPeerID
-
-try:
-    True
-except:
-    True = 1
-    False = 0
+from BitTornado.clock import clock
+from BitTornado.__init__ import createPeerID
 
 defaults = [
     ('max_uploads', 1,

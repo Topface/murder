@@ -1,7 +1,7 @@
 # Written by John Hoffman
 # see LICENSE.txt for license information
 
-from time import *
+import time
 import sys
 
 _MAXFORWARD = 100
@@ -9,11 +9,11 @@ _FUDGE = 1
 
 class RelativeTime:
     def __init__(self):
-        self.time = time()
+        self.time = time.time()
         self.offset = 0
 
     def get_time(self):        
-        t = time() + self.offset
+        t = time.time() + self.offset
         if t < self.time or t > self.time + _MAXFORWARD:
             self.time += _FUDGE
             self.offset += self.time - t

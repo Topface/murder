@@ -9,18 +9,13 @@ try:
 except ImportError:
     from selectpoll import poll, error, POLLIN, POLLOUT, POLLERR, POLLHUP
     timemult = 1
-from time import sleep
-from clock import clock
+import time
+from BitTornado.clock import clock
 import sys
 from random import shuffle, randrange
-from natpunch import UPnP_open_port, UPnP_close_port
+from BitTornado.natpunch import UPnP_open_port, UPnP_close_port
 # from BT1.StreamCheck import StreamCheck
 # import inspect
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 all = POLLIN | POLLOUT
 

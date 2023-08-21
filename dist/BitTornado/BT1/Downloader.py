@@ -5,11 +5,6 @@ from BitTornado.CurrentRateMeasure import Measure
 from BitTornado.bitfield import Bitfield
 from random import shuffle
 from BitTornado.clock import clock
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 EXPIRE_TIME = 60 * 60
 

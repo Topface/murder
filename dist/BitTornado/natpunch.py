@@ -5,14 +5,9 @@
 
 import socket
 from traceback import print_exc
-from subnetparse import IP_List
-from clock import clock
-from __init__ import createPeerID
-try:
-    True
-except:
-    True = 1
-    False = 0
+from BitTornado.subnetparse import IP_List
+from BitTornado.clock import clock
+from BitTornado.__init__ import createPeerID
 
 DEBUG = False
 

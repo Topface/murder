@@ -2,12 +2,7 @@ from functools import reduce
 # Written by Bram Cohen, Uoti Urpala, and John Hoffman
 # see LICENSE.txt for license information
 
-try:
-    True
-except:
-    True = 1
-    False = 0
-    bool = lambda x: not not x
+bool = lambda x: not not x
 
 try:
     sum([1])

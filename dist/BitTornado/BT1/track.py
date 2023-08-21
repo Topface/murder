@@ -5,37 +5,32 @@ from BitTornado.parseargs import parseargs, formatDefinitions
 from BitTornado.RawServer import RawServer, autodetect_ipv6, autodetect_socket_style
 from BitTornado.HTTPHandler import HTTPHandler, months, weekdays
 from BitTornado.parsedir import parsedir
-from NatCheck import NatCheck
-from T2T import T2TList
+from BitTornado.BT1.NatCheck import NatCheck
+from BitTornado.BT1.T2T import T2TList
 from BitTornado.subnetparse import IP_List, ipv6_to_ipv4, to_ipv4, is_valid_ip, is_ipv4
 from BitTornado.iprangeparse import IP_List as IP_Range_List
 from BitTornado.torrentlistparse import parsetorrentlist
 from threading import Event, Thread
 from BitTornado.bencode import bencode, bdecode, Bencached
 from BitTornado.zurllib import urlopen, quote, unquote
-from Filter import Filter
+from BitTornado.BT1.Filter import Filter
 from urllib.parse import urlparse
 from os import rename, getpid
 from os.path import exists, isfile
 from io import StringIO
 from traceback import print_exc
-from time import time, gmtime, strftime, localtime
+import time
+from datetime import datetime
 from BitTornado.clock import clock
 from random import shuffle, seed, randrange
-from sha import sha
-from types import StringType, IntType, LongType, ListType, DictType
+import hashlib
+from types import *
 from binascii import b2a_hex, a2b_hex, a2b_base64
-from string import lower
 import sys, os
 import signal
 import re
 import BitTornado.__init__
 from BitTornado.__init__ import version, createPeerID
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 defaults = [
     ('port', 8998, "Port to listen on."),
@@ -94,19 +89,19 @@ defaults = [
   ]
 
 def statefiletemplate(x):
-    if type(x) != DictType:
+    if type(x) != dict:
         raise ValueError
     for cname, cinfo in list(x.items()):
         if cname == 'peers':
             for y in list(cinfo.values()):      # The 'peers' key is a dictionary of SHA hashes (torrent ids)
-                 if type(y) != DictType:   # ... for the active torrents, and each is a dictionary
+                 if type(y) != dict:   # ... for the active torrents, and each is a dictionary
                      raise ValueError
                  for id, info in list(y.items()): # ... of client ids interested in that torrent
                      if (len(id) != 20):
                          raise ValueError
-                     if type(info) != DictType:  # ... each of which is also a dictionary
+                     if type(info) != dict:  # ... each of which is also a dictionary
                          raise ValueError # ... which has an IP, a Port, and a Bytes Left count for that client for that torrent
-                     if type(info.get('ip', '')) != StringType:
+                     if type(info.get('ip', '')) != str:
                          raise ValueError
                      port = info.get('port')
                      if type(port) not in (IntType,LongType) or port < 0:
@@ -115,13 +110,13 @@ def statefiletemplate(x):
                      if type(left) not in (IntType,LongType) or left < 0:
                          raise ValueError
         elif cname == 'completed':
-            if (type(cinfo) != DictType): # The 'completed' key is a dictionary of SHA hashes (torrent ids)
+            if (type(cinfo) != dict): # The 'completed' key is a dictionary of SHA hashes (torrent ids)
                 raise ValueError          # ... for keeping track of the total completions per torrent
             for y in list(cinfo.values()):      # ... each torrent has an integer value
                 if type(y) not in (IntType,LongType):
                     raise ValueError      # ... for the number of reported completions for that torrent
         elif cname == 'allowed':
-            if (type(cinfo) != DictType): # a list of info_hashes and included data
+            if (type(cinfo) != dict): # a list of info_hashes and included data
                 raise ValueError
             if 'allowed_dir_files' in x:
                 adlist = [z[1] for z in list(x['allowed_dir_files'].values())]
@@ -129,7 +124,7 @@ def statefiletemplate(x):
                     if not y in adlist:
                         raise ValueError
         elif cname == 'allowed_dir_files':
-            if (type(cinfo) != DictType): # a list of files, their attributes and info hashes
+            if (type(cinfo) != dict): # a list of files, their attributes and info hashes
                 raise ValueError
             dirkeys = {}
             for y in list(cinfo.values()):      # each entry should have a corresponding info_hash
@@ -149,9 +144,7 @@ local_IPs.set_intranet_addresses()
 
 
 def isotime(secs = None):
-    if secs == None:
-        secs = time()
-    return strftime('%Y-%m-%d %H:%M UTC', gmtime(secs))
+    return datetime.fromtimestamp(time.mktime(time.gmtime(secs))).strftime('%Y-%m-%d %H:%M UTC')
 
 http_via_filter = re.compile(' for ([0-9.]+)\Z')
 

@@ -27,17 +27,12 @@ may have unpredictable results.
 
 from io import StringIO
 from traceback import print_exc
-from types import DictType, StringType
+from types import *
 try:
     from types import BooleanType
 except ImportError:
     BooleanType = None
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 DEBUG = False
 
@@ -45,9 +40,9 @@ def ini_write(f, d, comment=''):
     try:
         a = {'':{}}
         for k,v in list(d.items()):
-            assert type(k) == StringType
+            assert type(k) == str
             k = k.lower()
-            if type(v) == DictType:
+            if type(v) == dict:
                 if DEBUG:
                     print('new section:' +k)
                 if k:
@@ -55,12 +50,12 @@ def ini_write(f, d, comment=''):
                     a[k] = {}
                 aa = a[k]
                 for kk,vv in v:
-                    assert type(kk) == StringType
+                    assert type(kk) == str
                     kk = kk.lower()
                     assert kk not in aa
                     if type(vv) == BooleanType:
                         vv = int(vv)
-                    if type(vv) == StringType:
+                    if type(vv) == str:
                         vv = '"'+vv+'"'
                     aa[kk] = str(vv)
                     if DEBUG:
@@ -70,7 +65,7 @@ def ini_write(f, d, comment=''):
                 assert k not in aa
                 if type(v) == BooleanType:
                     v = int(v)
-                if type(v) == StringType:
+                if type(v) == str:
                     v = '"'+v+'"'
                 aa[k] = str(v)
                 if DEBUG:

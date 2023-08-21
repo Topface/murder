@@ -5,11 +5,6 @@ from io import StringIO
 from urllib.parse import quote
 from threading import Event
 
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 class DownloaderFeedback:
     def __init__(self, choker, httpdl, add_task, upfunc, downfunc,

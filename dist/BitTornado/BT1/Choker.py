@@ -3,11 +3,6 @@
 
 from random import randrange, shuffle
 from BitTornado.clock import clock
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 class Choker:
     def __init__(self, config, schedule, picker, done = lambda: False):

@@ -3,11 +3,6 @@
 
 from io import StringIO
 #from RawServer import RawServer
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 from BT1.Encrypter import protocol_name
 

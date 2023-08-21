@@ -3,11 +3,6 @@
 
 from random import shuffle
 from traceback import print_exc
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 
 class FileSelector:

@@ -2,7 +2,7 @@
 # see LICENSE.txt for license information
 
 from select import select, error
-from time import sleep
+import time
 from types import IntType
 from bisect import bisect
 POLLIN = 1

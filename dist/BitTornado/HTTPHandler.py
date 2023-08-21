@@ -4,13 +4,8 @@
 from io import StringIO
 from sys import stdout
 import time
-from clock import clock
+from BitTornado.clock import clock
 from gzip import GzipFile
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 DEBUG = False
 

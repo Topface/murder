@@ -4,13 +4,12 @@
 
 from os.path import getsize, split, join, abspath, isdir
 from os import listdir
-from sha import sha
+import hashlib
 from copy import copy
-from string import strip
 from BitTornado.bencode import bencode
-from btformats import check_info
+from BitTornado.BT1.btformats import check_info
 from threading import Event
-from time import time
+import time
 from traceback import print_exc
 try:
     from sys import getfilesystemencoding
@@ -104,7 +103,7 @@ def make_meta_file(file, url, params = {}, flag = Event(),
         return
     check_info(info)
     h = open(f, 'wb')
-    data = {'info': info, 'announce': strip(url), 'creation date': int(time())}
+    data = {'info': info, 'announce': url.strip(), 'creation date': int(time.time())}
     
     if 'comment' in params and params['comment']:
         data['comment'] = params['comment']
@@ -148,6 +147,8 @@ def uniconvert(s, e):
         s = str(s,e)
     except UnicodeError:
         raise UnicodeError('bad filename: '+s)
+    except TypeError:
+        return s
     return s.encode('utf-8')
 
 def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
@@ -156,7 +157,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
         subs = subfiles(file)
         subs.sort()
         pieces = []
-        sh = sha()
+        sh = hashlib.sha1()
         done = 0
         fs = []
         totalsize = 0.0
@@ -181,7 +182,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
                 if done == piece_length:
                     pieces.append(sh.digest())
                     done = 0
-                    sh = sha()
+                    sh = hashlib.sha1()
                 if progress_percent:
                     progress(totalhashed / totalsize)
                 else:
@@ -189,7 +190,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
             h.close()
         if done > 0:
             pieces.append(sh.digest())
-        return {'pieces': ''.join(pieces),
+        return {'pieces': b''.join(pieces),
             'piece length': piece_length, 'files': fs, 
             'name': uniconvert(split(file)[1], encoding) }
     else:
@@ -201,7 +202,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
             x = h.read(min(piece_length, size - p))
             if flag.isSet():
                 return
-            pieces.append(sha(x).digest())
+            pieces.append(hashlib.sha1(x).digest())
             p += piece_length
             if p > size:
                 p = size
@@ -210,7 +211,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
             else:
                 progress(min(piece_length, size - p))
         h.close()
-        return {'pieces': ''.join(pieces), 
+        return {'pieces': b''.join(pieces),
             'piece length': piece_length, 'length': size, 
             'name': uniconvert(split(file)[1], encoding) }
 

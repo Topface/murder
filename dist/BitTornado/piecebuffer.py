@@ -4,12 +4,7 @@
 from array import array
 from threading import Lock
 # import inspect
-try:
-    True
-except:
-    True = 1
-    False = 0
-    
+
 DEBUG = False
 
 class SingleBuffer:

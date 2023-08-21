@@ -8,11 +8,6 @@ from http.client import HTTPConnection
 from urllib.parse import quote
 from threading import Thread
 from BitTornado.__init__ import product_name,version_short
-try:
-    True
-except:
-    True = 1
-    False = 0
 
 EXPIRE_TIME = 60 * 60
 
