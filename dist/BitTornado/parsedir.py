@@ -85,7 +85,7 @@ def parsedir(directory, parsed, files, blocked,
             ff = open(p, 'rb')
             d = bdecode(ff.read())
             check_info(d['info'])
-            h = sha(bencode(d['info'])).digest()
+            h = hashlib.sha1(bencode(d['info'])).digest()
             new_file[1] = h
             if h in new_parsed:
                 errfunc('**warning** '+

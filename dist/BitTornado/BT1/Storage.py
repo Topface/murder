@@ -64,9 +64,9 @@ class Storage:
                 self.file_ranges.append(None)
                 self.working_ranges.append([])
             else:
-                range = (total, total + length, 0, file)
-                self.file_ranges.append(range)
-                self.working_ranges.append([range])
+                rangeX = (total, total + length, 0, file)
+                self.file_ranges.append(rangeX)
+                self.working_ranges.append([rangeX])
                 numfiles += 1
                 total += length
                 if disabled_files[i]:

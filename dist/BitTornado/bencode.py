@@ -74,7 +74,7 @@ def decode_unicode(x, f):
 def decode_list(x, f):
     r, f = [], f+1
     while x[f] != ord('e'):
-        v, f = decode_func[x[f]](x, f)
+        v, f = decode_func[chr(x[f])](x, f)
         r.append(v)
     return (r, f + 1)
 
@@ -96,7 +96,7 @@ def decode_dict(x, f):
         if lastkey >= rawkey:
             raise ValueError
         lastkey = rawkey
-        data[key], f = decode_func[x[f]](x, f)
+        data[key], f = decode_func[chr(x[f])](x, f)
     return (data, f + 1)
 
 decode_func = {}
@@ -117,8 +117,8 @@ decode_func['9'] = decode_string
   
 def bdecode(x, sloppy = 0):
     try:
-        r, l = decode_func[x[0]](x, 0)
-#    except (IndexError, KeyError):
+        r, l = decode_func[chr(x[0])](x, 0)
+#-------    except (IndexError, KeyError):
     except (IndexError, KeyError, ValueError):
         raise ValueError("bad bencoded data")
     if not sloppy and l != len(x):
@@ -297,10 +297,10 @@ def encode_unicode(x,r):
     encode_string(x.encode('UTF-8'),r)
 
 def encode_list(x,r):
-        r.append(b'l')
-        for e in x:
-            encode_func[type(e)](e, r)
-        r.append(b'e')
+    r.append(b'l')
+    for e in x:
+        encode_func[type(e)](e, r)
+    r.append(b'e')
 
 def encode_dict(x,r):
     r.append(b'd')

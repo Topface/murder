@@ -237,7 +237,7 @@ def run(params):
         if not response:
             break
 
-        infohash = sha(bencode(response['info'])).digest()
+        infohash = hashlib.sha1(bencode(response['info'])).digest()
 
         dow = BT1Download(h.display, h.finished, h.error, disp_exception, doneFlag,
                         config, response, infohash, myid, rawserver, listen_port,

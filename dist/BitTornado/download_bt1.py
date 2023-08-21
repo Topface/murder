@@ -193,7 +193,7 @@ def download(params, filefunc, statusfunc, finfunc, errorfunc, doneflag, cols,
     if not response:
         return
 
-    infohash = sha(bencode(response['info'])).digest()
+    infohash = hashlib.sha1(bencode(response['info'])).digest()
 
     d = BT1Download(statusfunc, finfunc, errorfunc, exchandler, doneflag,
                     config, response, infohash, myid, rawserver, listen_port)
@@ -260,8 +260,8 @@ def get_response(file, url, errorfunc):
             h = open(file, 'rb')
             try:
                 line = h.read(10)   # quick test to see if responsefile contains a dict
-                front,garbage = line.split(':',1)
-                assert front[0] == 'd'
+                front,garbage = line.split(b':',1)
+                assert front[0] == int.from_bytes(b'd', byteorder='big')
                 int(front[1:])
             except:
                 errorfunc(file+' is not a valid responsefile')
