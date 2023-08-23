@@ -77,7 +77,7 @@ def check_peers(message):
                 id = p['peer id']
                 if type(id) != str or len(id) != 20:
                     raise ValueError
-    elif type(peers) != str or len(peers) % 6 != 0:
+    elif type(peers) not in (str, bytes) or len(peers) % 6 != 0:
         raise ValueError
     interval = message.get('interval', 1)
     if type(interval) != int or interval <= 0:

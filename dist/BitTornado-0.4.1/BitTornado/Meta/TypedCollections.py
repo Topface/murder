@@ -103,8 +103,8 @@ class TypedDict(dict):
                 val = self.valmap[type(val)](val)
             val = self.typemap[key](val)
 
-        if self.valid_keys is not None and key not in self.valid_keys:
-            raise KeyError('Invalid key: ' + key)
+#         if self.valid_keys is not None and key not in self.valid_keys:
+#             raise KeyError('Invalid key: ' + key)
 
         if self.keyconst is not None:
             assert self.keyconst(key)

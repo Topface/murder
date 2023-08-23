@@ -299,7 +299,7 @@ class Rerequester:
                 check_peers(r)
             except ValueError as e:
                 if self.lock.trip(l):
-                    self.errorcodes['bad_data'] = 'bad data from tracker - ' + str(e)
+                    self.errorcodes['bad_data'] = 'bad data rereq from tracker - ' + str(e)
                     self.lock.unwait(l)
                 return
             
@@ -332,10 +332,11 @@ class Rerequester:
 #        ps = len(r['peers']) + self.howmany()
         p = r['peers']
         peers = []
-        if type(p) == type(''):
+        if type(p) in (str, bytes):
             for x in range(0, len(p), 6):
-                ip = '.'.join([str(ord(i)) for i in p[x:x+4]])
-                port = (ord(p[x+4]) << 8) | ord(p[x+5])
+                ip = '.'.join([str(i) for i in p[x:x+4]])
+                port = (p[x+4] << 8) | p[x+5]
+                print( ip, port )
                 peers.append(((ip, port), 0))
         else:
             for x in p:

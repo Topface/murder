@@ -152,7 +152,7 @@ def ini_read(f, errfunc = errfunc):
                 continue
             d[k] = v
         if DEBUG:
-            print(dd)
+            print('dd', dd)
     except:
         if DEBUG:
             print_exc()

@@ -105,7 +105,7 @@ class RateLimiter:
 
     def ping(self, delay):
         if DEBUG:
-            print(delay)
+            print('delay', delay)
         if not self.autoadjust:
             return
         self.pings.append(delay > PING_BOUNDARY)

@@ -8,7 +8,7 @@ from random import randrange
 import sys
 import BitTornado.BT1.__init__
 
-DEBUG = True
+DEBUG = False
 
 
 def excfunc(x):

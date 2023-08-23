@@ -405,8 +405,8 @@ class Storage:
             working_range = working_range_b + working_range_m + working_range_e
 
         if DEBUG:            
-            print(str(working_range))
-            print(str(update_pieces))
+            print('working range', str(working_range))
+            print('update pieces', str(update_pieces))
         r = (tuple(working_range), tuple(update_pieces), tuple(disabled_files))
         self.disabled_ranges[f] = r
         return r
@@ -531,7 +531,7 @@ class Storage:
                     valid_pieces[p] = 1
 
             if DEBUG:
-                print(list(valid_pieces.keys()))
+                print('list valid pieces keys', list(valid_pieces.keys()))
             
             def test(old, size, mtime):
                 oldsize, oldmtime = old
@@ -574,5 +574,5 @@ class Storage:
             return []
 
         if DEBUG:
-            print(list(valid_pieces.keys()))                        
+            print('list valid pieces.keys', list(valid_pieces.keys()))
         return list(valid_pieces.keys())

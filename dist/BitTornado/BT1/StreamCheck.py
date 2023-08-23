@@ -29,7 +29,7 @@ for i in range(256):
 def tohex(s):
     r = []
     for c in s:
-        r.append(hexmap[ord(c)])
+        r.append(hexmap[c])
     return ''.join(r)
 
 def make_readable(s):

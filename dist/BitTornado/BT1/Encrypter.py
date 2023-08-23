@@ -1,6 +1,7 @@
 # Written by Bram Cohen
 # see LICENSE.txt for license information
 
+# from io import BytesIO
 from io import StringIO
 from binascii import b2a_hex
 from socket import error as socketerror
@@ -27,7 +28,7 @@ for i in range(256):
 def tohex(s):
     r = []
     for c in s:
-        r.append(hexmap[ord(c)])
+        r.append(hexmap[c])
     return ''.join(r)
 
 def make_readable(s):
@@ -65,11 +66,14 @@ class Connection:
         self.keepalive = lambda: None
         self.closed = False
         self.buffer = StringIO()
+#         self.buffer = BytesIO()
         if self.locally_initiated:
             incompletecounter.increment()
         if self.locally_initiated or ext_handshake:
-            self.connection.write(chr(len(protocol_name)) + protocol_name + 
-                option_pattern + self.Encoder.download_id)
+#             self.connection.write(chr(len(protocol_name)) + protocol_name + option_pattern + self.Encoder.download_id)
+              self.connection.write(chr(len(protocol_name)).encode('utf-8') + protocol_name.encode('utf-8') + option_pattern.encode('utf-8') + self.Encoder.download_id)
+#             self.connection.write(chr(len(protocol_name)) + protocol_name + option_pattern + tohex(self.Encoder.download_id))
+#             self.connection.write(chr(len(protocol_name)) + protocol_name + option_pattern + str(self.Encoder.download_id))
         if ext_handshake:
             self.Encoder.connecter.external_connection_made += 1
             self.connection.write(self.Encoder.my_id)
@@ -168,6 +172,13 @@ class Connection:
             self.connection.write(message)
 
     def data_came_in(self, connection, s):
+        print('data_came_in', str(s))
+#         for i in str(s):
+#             print(ord(i))
+#         s = tohex(s)
+        s = str(s)
+#         print('data_came_in S', s)
+
         self.Encoder.measurefunc(len(s))
         while True:
             if self.closed:
@@ -179,15 +190,18 @@ class Connection:
             self.buffer.write(s[:i])
             s = s[i:]
             m = self.buffer.getvalue()
-            self.buffer.reset()
+            print ('m', m)
+#             self.buffer.reset()
             self.buffer.truncate()
             try:
                 x = self.next_func(m)
+                print ('x', x)
             except:
                 self.next_len, self.next_func = 1, self.read_dead
                 raise
             if x is None:
                 self.close()
+                print ('self.close')
                 return
             self.next_len, self.next_func = x
 

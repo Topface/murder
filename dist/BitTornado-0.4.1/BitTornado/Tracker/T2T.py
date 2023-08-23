@@ -4,7 +4,7 @@ import urllib
 from BitTornado.Client.Announce import Announcer
 from BitTornado.Client.Rerequester import Rerequester
 
-DEBUG = True
+DEBUG = False
 
 
 def excfunc(x):

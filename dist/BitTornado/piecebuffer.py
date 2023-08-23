@@ -14,7 +14,7 @@ class SingleBuffer:
 
     def init(self):
         if DEBUG:
-            print(self.count)
+            print('init self.count', self.count)
             '''
             for x in xrange(6,1,-1):
                 try:
@@ -49,7 +49,7 @@ class SingleBuffer:
 
     def release(self):
         if DEBUG:
-            print(-self.count)
+            print('release count', -self.count)
         self.pool.release(self)
 
 

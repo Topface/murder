@@ -122,7 +122,7 @@ class RawServer:
                         if id in self.tasks_to_kill:
                             pass
                         try:
-#                            print func.func_name
+#                             print(func)
                             func()
                         except (SystemError, MemoryError) as e:
                             self.failfunc(str(e))
